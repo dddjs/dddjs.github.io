@@ -11,6 +11,7 @@
       position: relative;
       width: 100%;
       height: 50px;
+      background: yellow;
     }
   </style>
 </head>
@@ -38,7 +39,7 @@
       audio: true
     });
     media1.then((stream) => {
-      // audio_stream = stream;
+      audio_stream = stream;
       var AudioContext = window["AudioContext"] || window["webkitAudioContext"] || window["mozAudioContext"] ||
         window["msAudioContext"];
       var context = new AudioContext();
