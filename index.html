@@ -16,19 +16,43 @@
 </head>
 
 <body>
-  <button id="record">录音</button>
+  <button id="record_audio">录音频</button>
+  <button id="stop_audio">stop</button>
+  <audio controls="controls" id="record_play"></audio>
   <script>
-    var recordBtn = document.getElementById('record');
-    recordBtn.addEventListener('click', function () {
-      navigator.mediaDevices.getUserMedia({
-        audio: true
-      }).then((stream) => {
-        // audio_stream = stream;
-        alert('stream')
-      }).catch((error) => {
-        alert(error)
-      });
-    })
+    var record_audio = document.querySelector('#record_audio');
+    var stop_audio = document.querySelector('#stop_audio');
+    var record_play = document.querySelector('#record_play');
+    var audio_stream;
+    var media1 = navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+    media1.then((stream) => {
+      audio_stream = stream;
+    }).catch((error) => {
+      alert(error)
+    });
+    record_audio.onclick = function () {
+      record_audio.disabled = 'true';
+      var mediaRecorder = new MediaRecorder(audio_stream);
+      mediaRecorder.ondataavailable = function (e) {
+        // blob_audio = new Blob([e.data], {type:e.data.type});
+        blob_audio = new Blob([e.data], {
+          type: 'audio/mp3'
+        });
+        //可以存为mp3格式但是本地无法播放，只有网页可以播放
+      }
+      mediaRecorder.start();
+      mediaRecorder.onstop = function () {
+        record_play.src = URL.createObjectURL(blob_audio);
+        record_play.play();
+        //download(blob_audio);
+      }
+      stop_audio.onclick = function () {
+        record_audio.disabled = '';
+        mediaRecorder.stop();
+      }
+    }
   </script>
 </body>
 
