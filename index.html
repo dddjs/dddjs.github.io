@@ -43,7 +43,7 @@
         window["msAudioContext"];
       var context = new AudioContext();
       //从元素创建媒体节点
-      var media = context.createMediaElementSource(audio);
+      var media = context.createMediaElementSource(stream);
       //创建脚本处理节点
       var processor = context.createScriptProcessor(4096, 1, 1);
       //连接：媒体节点→控制节点→输出源
