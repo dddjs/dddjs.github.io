@@ -37,8 +37,6 @@
 <body id="container">
   <button id="record_audio">录音频</button>
   <button id="stop_audio">stop</button>
-  <audio controls="controls" id="record_play"></audio>
-  <canvas id="audio_canvas"></canvas>
   <script>
     var record_audio = document.querySelector('#record_audio');
     var stop_audio = document.querySelector('#stop_audio');
@@ -65,9 +63,6 @@
       }
       mediaRecorder.start();
       mediaRecorder.onstop = function () {
-        record_play.src = URL.createObjectURL(blob_audio);
-        record_play.play();
-        //download(blob_audio);
         var reader = new FileReader();
         reader.readAsDataURL(blob_audio);
         reader.onloadend = function () {
