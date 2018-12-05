@@ -1,0 +1,52 @@
+<!-- 频谱图 -->
+<script>
+  var bufferLength = analyser.frequencyBinCount,
+    dataArray = new Uint8Array(bufferLength);
+
+  analyser.getByteFrequencyData(dataArray);
+  var canvas = document.getElementById('audio_canvas'),
+    ctx = canvas.getContext("2d"),
+    c_width = canvas.width,
+    c_height = canvas.height;
+
+
+  for (var i = 0; i < bufferLength; i++) {
+    value = dataArray[i];
+    ctx.fillStyle = '#f99';
+    ctx.fillRect(i, c_height - value, 1, value);
+  }
+</script>
+
+<script>
+  // 条形的宽度
+  var bar_width = 10,
+    bar_gap = 2,
+    bar_part = bar_width + bar_gap,
+    bar_num = Math.round(c_width / bar_part);
+
+  // ***************************************
+  function drawVisual() {
+    var i = 0,
+      value;
+
+    var bufferLength = analyser.frequencyBinCount,
+      dataArray = new Uint8Array(bufferLength);
+
+    // 每段包含的频谱宽
+    var array_width = Math.round(bufferLength / bar_num);
+
+    analyser.getByteFrequencyData(dataArray);
+
+    ctx.clearRect(0, 0, c_width, c_height)
+
+    for (i; i < bar_num; i++) {
+      value = dataArray[i * array_width];
+
+      ctx.fillStyle = '#f99';
+      ctx.fillRect(bar_part * i, c_height - value, bar_width, value);
+    }
+
+    animation_id = requestAnimationFrame(drawVisual);
+    // console.log(animation_id)
+  }
+</script>

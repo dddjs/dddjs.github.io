@@ -1,0 +1,11 @@
+补充--隐藏播放控件
+据说腾讯的android团队的x5内核团队放开了视频播放的限制，视频不一定调用它们那个备受诟病的视频播放器了，x5-video-player-type="h5"属性这个属性好像就有点那个意思，虽然体验还是有点...（导航栏也会清理）但至少播放器控件没有了，上层可以浮div或者其他元素了，这个还是值得一提。
+还有一点值得说的是，带播放器控件的隐藏，
+
+<pre>
+<div class="videobox" ontouchmove="return false;">
+  <video id="mainvideo" src="test.mp4" x5-video-player-type="h5" playsinline webkit-playsinline></video>
+</div>  
+</pre>
+
+比如这个videobox在android下隐藏，只用display：none貌似还是不行的，但加个z-index:-1，设置成-1就可以达到隐藏播放器控件的目的了。这个经测可用且好用，可以一试。
