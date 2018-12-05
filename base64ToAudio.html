@@ -52,17 +52,12 @@
    * 录音语音文件转base64字符串
    * @param {Object} path
    */
-  function Audio2dataURL(path) {
-    plus.io.resolveLocalFileSystemURL(path, function (entry) {
-      entry.file(function (file) {
-        var reader = new plus.io.FileReader();
-        reader.onloadend = function (e) {
-          console.log(e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }, function (e) {
-        mui.toast("读写出现异常: " + e.message);
-      })
-    })
+  function blobToBase64(blob) {
+    var reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      base64data = reader.result;
+      console.log(base64data);
+    }
   }
 </script>
