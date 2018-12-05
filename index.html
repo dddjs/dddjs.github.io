@@ -14,14 +14,31 @@
       background: yellow;
     }
   </style>
+  <script>
+    HTMLElement.prototype.appendHTML = function (html) {
+      var divTemp = document.createElement("div"),
+        nodes = null
+        // 文档片段，一次性append，提高性能
+        ,
+        fragment = document.createDocumentFragment();
+      divTemp.innerHTML = html;
+      nodes = divTemp.childNodes;
+      for (var i = 0, length = nodes.length; i < length; i += 1) {
+        fragment.appendChild(nodes[i].cloneNode(true));
+      }
+      this.appendChild(fragment);
+      // 据说下面这样子世界会更清净
+      nodes = null;
+      fragment = null;
+    };
+  </script>
 </head>
 
-<body>
+<body id="container">
   <button id="record_audio">录音频</button>
   <button id="stop_audio">stop</button>
   <audio controls="controls" id="record_play"></audio>
   <canvas id="audio_canvas"></canvas>
-  <div id="container"></div>
   <script>
     var record_audio = document.querySelector('#record_audio');
     var stop_audio = document.querySelector('#stop_audio');
@@ -56,7 +73,11 @@
         reader.onloadend = function () {
           let base64data = reader.result;
           console.log(base64data);
-          container.innerHTML = base64data;
+          let html =
+            `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
+  <source src="${base64data}" />
+</audio>`
+          container.appendHTML(html)
         }
       }
       stop_audio.onclick = function () {
