@@ -12,51 +12,101 @@
     // Secret Key: s5LWNWkx7TXCDye1M42i0CIFbMu8Dg1t
     // url:http://vop.baidu.com/server_api
     // 初始化变量
-    $.ajax({
-      type: 'POST',
-      url: "https://openapi.baidu.com/oauth/2.0/token",
-      data: {
-        grant_type: "client_credentials",
-        client_id: "P3xLGkvAHlMkLjEP6cu9zsTi",
-        client_secret: "s5LWNWkx7TXCDye1M42i0CIFbMu8Dg1t"
-      },
-      success: function (res) {
-        console.log(res)
-        if (res.access_token) {
-          alert(res.access_token)
-          // $.ajax({
-          //   type: 'POST',
-          //   url: "http://vop.baidu.com/server_api",
-          //   data: {
-          //     format: "amr",
-          //     rate: 8000,
-          //     channel: 1,
-          //     cuid: 'bitor',
-          //     token: res.access_token,
-          //     ptc: "",
-          //     lan: 'zh',
-          //     // url:"",
-          //     // callback:'',
-          //     speech: "",
-          //     len: ""
-          //   },
-          //   success: function (res) {
-          //     console.log(res)
-          //     if (res.access_token) {
-          //       $
-          //     }
-          //   },
-          //   dataType: 'json'
-          // });
-        }
-      },
-      dataType: 'json'
-    });
+
+    function getData(base64data, len) {
+      $.ajax({
+        type: 'POST',
+        url: "https://openapi.baidu.com/oauth/2.0/token",
+        data: {
+          grant_type: "client_credentials",
+          client_id: "P3xLGkvAHlMkLjEP6cu9zsTi",
+          client_secret: "s5LWNWkx7TXCDye1M42i0CIFbMu8Dg1t"
+        },
+        success: function (res) {
+          console.log(res)
+          if (res.access_token) {
+            alert(res.access_token)
+            $.ajax({
+              type: 'POST',
+              url: "http://vop.baidu.com/server_api",
+              data: {
+                format: "amr",
+                rate: 8000,
+                channel: 1,
+                cuid: 'bitor',
+                token: res.access_token,
+                ptc: "",
+                lan: 'zh',
+                // url:"",
+                // callback:'',
+                speech: base64data,
+                len: len,
+              },
+              success: function (res) {
+                console.log(res)
+                if (res.err_no !== 0) {
+                  alert(res.result)
+                }
+              },
+              dataType: 'json'
+            });
+          }
+        },
+        dataType: 'json'
+      });
+    }
   </script>
 </head>
 
 <body>
+  <button id="record_audio">录音频</button>
+  <button id="stop_audio">stop</button>
+  <script>
+    var record_audio = document.querySelector('#record_audio');
+    var stop_audio = document.querySelector('#stop_audio');
+    var record_play = document.querySelector('#record_play');
+    var audio_stream;
+    var media1 = navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+    media1.then((stream) => {
+      audio_stream = stream;
 
+    }).catch((error) => {
+      alert(error)
+    });
+    record_audio.onclick = function () {
+      record_audio.disabled = 'true';
+      var mediaRecorder = new MediaRecorder(audio_stream);
+      mediaRecorder.ondataavailable = function (e) {
+        // blob_audio = new Blob([e.data], {type:e.data.type});
+        blob_audio = new Blob([e.data], {
+          type: 'audio/amr'
+        });
+        //可以存为mp3格式但是本地无法播放，只有网页可以播放
+      }
+      mediaRecorder.start();
+      mediaRecorder.onstop = function () {
+        var reader = new FileReader();
+        reader.readAsDataURL(blob_audio);
+        reader.onloadend = function () {
+          let base64data = reader.result;
+
+          getData(base64data, blob_audio.size);
+
+          let html =
+            `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
+  <source src="${base64data}" />
+</audio>`
+          container.appendHTML(html)
+        }
+      }
+      stop_audio.onclick = function () {
+        record_audio.disabled = '';
+        mediaRecorder.stop();
+      }
+    }
+  </script>
 </body>
 
 </html>
