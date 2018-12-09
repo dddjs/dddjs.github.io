@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #audio_canvas {
+      position: relative;
+      width: 100%;
+      height: 50px;
+      background: yellow;
+    }
+  </style>
+  <script>
+    HTMLElement.prototype.appendHTML = function (html) {
+      var divTemp = document.createElement("div"),
+        nodes = null
+        // 文档片段，一次性append，提高性能
+        ,
+        fragment = document.createDocumentFragment();
+      divTemp.innerHTML = html;
+      nodes = divTemp.childNodes;
+      for (var i = 0, length = nodes.length; i < length; i += 1) {
+        fragment.appendChild(nodes[i].cloneNode(true));
+      }
+      this.appendChild(fragment);
+      // 据说下面这样子世界会更清净
+      nodes = null;
+      fragment = null;
+    };
+  </script>
+</head>
+
+<body id="container">
+  <button id="record_audio">录音频</button>
+  <button id="stop_audio">stop</button>
+  <script>
+    var record_audio = document.querySelector('#record_audio');
+    var stop_audio = document.querySelector('#stop_audio');
+    var record_play = document.querySelector('#record_play');
+    var audio_stream;
+    var media1 = navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+    media1.then((stream) => {
+      audio_stream = stream;
+
+    }).catch((error) => {
+      alert(error)
+    });
+    record_audio.onclick = function () {
+      record_audio.disabled = 'true';
+      var mediaRecorder = new MediaRecorder(audio_stream);
+      mediaRecorder.ondataavailable = function (e) {
+        // blob_audio = new Blob([e.data], {type:e.data.type});
+        blob_audio = new Blob([e.data], {
+          type: 'audio/mp3'
+        });
+        //可以存为mp3格式但是本地无法播放，只有网页可以播放
+      }
+      mediaRecorder.start();
+      mediaRecorder.onstop = function () {
+        var reader = new FileReader();
+        reader.readAsDataURL(blob_audio);
+        reader.onloadend = function () {
+          let base64data = reader.result;
+          console.log(base64data);
+          let html =
+            `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
+  <source src="${base64data}" />
+</audio>`
+          container.appendHTML(html)
+        }
+      }
+      stop_audio.onclick = function () {
+        record_audio.disabled = '';
+        mediaRecorder.stop();
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,86 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <style>
-    #audio_canvas {
-      position: relative;
-      width: 100%;
-      height: 50px;
-      background: yellow;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <script type="text/javascript" src="baidu_tts_cors.js"></script>
+  <script type="text/javascript">
+
+    // 初始化变量
+    var audio = null;
+    var playBtn = null;
+
+    // dom加载完毕回调后注册按钮对象
+    ready(function() {
+        playBtn = document.getElementById('playBtn');
+    });
+
+    // 合成按钮
+    function tts() {
+        let text = document.getElementById('text').value;
+        playBtn.innerText = '准备中';
+
+        // 调用语音合成接口
+        // 参数含义请参考 https://ai.baidu.com/docs#/TTS-API/41ac79a6
+        audio = btts({
+            tex: text,
+            tok: '24.c31eedd807bdd86586bd165e1e1717c2.2592000.1530954866.282335-9496006',
+            spd: 5,
+            pit: 5,
+            vol: 15,
+            per: 4
+        }, {
+            volume: 0.3,
+            autoDestory: true,
+            timeout: 10000,
+            hidden: false,
+            onInit: function (htmlAudioElement) {
+
+            },
+            onSuccess: function(htmlAudioElement) {
+                audio = htmlAudioElement;
+                playBtn.innerText = '播放';
+            },
+            onError: function(text) {
+                alert(text)
+            },
+            onTimeout: function () {
+                alert('timeout')
+            }
+        });
     }
-  </style>
-  <script>
-    HTMLElement.prototype.appendHTML = function (html) {
-      var divTemp = document.createElement("div"),
-        nodes = null
-        // 文档片段，一次性append，提高性能
-        ,
-        fragment = document.createDocumentFragment();
-      divTemp.innerHTML = html;
-      nodes = divTemp.childNodes;
-      for (var i = 0, length = nodes.length; i < length; i += 1) {
-        fragment.appendChild(nodes[i].cloneNode(true));
-      }
-      this.appendChild(fragment);
-      // 据说下面这样子世界会更清净
-      nodes = null;
-      fragment = null;
-    };
+
+    // 播放按钮
+    function play() {
+        if (audio === null) {
+            alert('请先点击合成')
+        } else {
+            audio.play();
+        }
+    }
+
+    // 暂停按钮
+    function pause() {
+        if (audio === null) {
+            alert('请先点击合成')
+        } else {
+            audio.pause();
+        }
+    }
+
+    // 取消按钮
+    function cancel() {
+        if (audio === null) {
+            alert('请先点击合成')
+        } else {
+            audio.pause();
+            document.body.removeChild(audio);
+            audio = null;
+            playBtn.innerText = '准备中';
+        }
+    }
+
+    // dom加载完毕回调
+    function ready(callback){
+        var doc = document;
+        if (doc.addEventListener) {
+            doc.addEventListener('DOMContentLoaded', function() {
+                callback();
+            }, false);
+        } else if (doc.attachEvent) {
+            doc.attachEvent('onreadystatechange', function() {
+                if (doc.readyState === 'complete') {
+                    callback();
+                }
+            });
+        }
+    }
   </script>
 </head>
-
-<body id="container">
-  <button id="record_audio">录音频</button>
-  <button id="stop_audio">stop</button>
-  <script>
-    var record_audio = document.querySelector('#record_audio');
-    var stop_audio = document.querySelector('#stop_audio');
-    var record_play = document.querySelector('#record_play');
-    var audio_stream;
-    var media1 = navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-    media1.then((stream) => {
-      audio_stream = stream;
-
-    }).catch((error) => {
-      alert(error)
-    });
-    record_audio.onclick = function () {
-      record_audio.disabled = 'true';
-      var mediaRecorder = new MediaRecorder(audio_stream);
-      mediaRecorder.ondataavailable = function (e) {
-        // blob_audio = new Blob([e.data], {type:e.data.type});
-        blob_audio = new Blob([e.data], {
-          type: 'audio/mp3'
-        });
-        //可以存为mp3格式但是本地无法播放，只有网页可以播放
-      }
-      mediaRecorder.start();
-      mediaRecorder.onstop = function () {
-        var reader = new FileReader();
-        reader.readAsDataURL(blob_audio);
-        reader.onloadend = function () {
-          let base64data = reader.result;
-          console.log(base64data);
-          let html =
-            `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
-  <source src="${base64data}" />
-</audio>`
-          container.appendHTML(html)
-        }
-      }
-      stop_audio.onclick = function () {
-        record_audio.disabled = '';
-        mediaRecorder.stop();
-      }
-    }
-  </script>
+<body>
+    <div>
+        <input type="text" id='text' value='百度语音合成' style='width: 500px;'>
+        <button onclick='tts()'>合成</button>
+        <button onclick='play()' id='playBtn'>准备中</button>
+        <button onclick='pause()'>暂停</button>
+        <button onclick='cancel()'>取消</button>
+    </div>
 </body>
-
 </html>
