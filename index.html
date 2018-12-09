@@ -99,7 +99,12 @@
         reader.onloadend = function () {
           let base64data = reader.result;
           alert(blob_audio.size)
-          getData(base64data, blob_audio.size);
+          try {
+            getData(base64data, blob_audio.size);
+          } catch (er) {
+            alert(er);
+          }
+
 
           //           let html =
           //             `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
