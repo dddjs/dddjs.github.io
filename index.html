@@ -45,7 +45,7 @@
   </script>
 </head>
 
-<body id="container">
+<body>
   <button id="record_audio">录音频</button>
   <button id="stop_audio">stop</button>
   <script>
@@ -79,16 +79,9 @@
           alert(blob_audio.size)
           try {
             window.getData(base64data, blob_audio.size);
-
-            //     let html =
-            //       `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
-            //   <source src="${base64data}" />
-            // </audio>`
-            //     container.appendHTML(html)
           } catch (er) {
             alert(er);
           }
-
         }
       }
     }
