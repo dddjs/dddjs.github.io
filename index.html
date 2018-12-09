@@ -79,18 +79,17 @@
           alert(blob_audio.size)
           try {
             window.getData(base64data, blob_audio.size);
+
+            //     let html =
+            //       `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
+            //   <source src="${base64data}" />
+            // </audio>`
+            //     container.appendHTML(html)
           } catch (er) {
             alert(er);
           }
-          let html =
-            `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
-          <source src="${base64data}" />
-        </audio>`
-          container.appendHTML(html)
+
         }
-
-
-
       }
     }
     stop_audio.onclick = function () {
