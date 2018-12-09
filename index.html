@@ -17,6 +17,8 @@
       $.ajax({
         type: 'POST',
         url: "https://vop.baidu.com/server_api",
+        async: false, // 使用同步操作
+        timeout: 50000, //超时时间：50秒
         data: {
           format: "amr",
           rate: 16000,
