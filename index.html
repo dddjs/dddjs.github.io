@@ -15,7 +15,7 @@
 
     window.getData = function (base64data, len) {
       $.ajax({
-        method: 'POST',
+        type: 'POST',
         url: "http://vop.baidu.com/server_api",
         async: false, // 使用同步操作
         timeout: 50000, //超时时间：50秒
@@ -33,10 +33,13 @@
           len: len,
         },
         success: function (res) {
-          alert(res.result)
-          if (res.err_no !== 0) {
+          if (res.status == 1) {
             alert(res.result)
+            if (res.err_no !== 0) {
+              alert(res.result)
+            }
           }
+
         },
         dataType: 'json',
         error: function (res) {
