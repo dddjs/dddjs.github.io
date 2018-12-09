@@ -13,55 +13,55 @@
     // url:http://vop.baidu.com/server_api
     // 初始化变量
 
-    function getData(base64data, len) {
-      // $.ajax({
-      //   type: 'GET',
-      //   url: "https://openapi.baidu.com/oauth/2.0/token",
-      //   dataType: 'json',
-      //   data: {
-      //     grant_type: "client_credentials",
-      //     client_id: "P3xLGkvAHlMkLjEP6cu9zsTi",
-      //     client_secret: "s5LWNWkx7TXCDye1M42i0CIFbMu8Dg1t"
-      //   },
-      //   success: function (res) {
-      //     console.log(res)
-      //     alert(JSON.stringify(res))
-      // if (res.access_token) {
-      //   alert(res.access_token)
-      $.ajax({
-        type: 'POST',
-        url: "https://vop.baidu.com/server_api",
-        data: {
-          format: "amr",
-          rate: 8000,
-          channel: 1,
-          cuid: 'bitor',
-          token: '24.662081bcb1ab75c0328d23d3bbbad791.2592000.1546956301.282335-15105521',
-          ptc: "",
-          lan: 'zh',
-          // url:"",
-          // callback:'',
-          speech: base64data,
-          len: len,
-        },
-        success: function (res) {
-          alert(res.result)
-          if (res.err_no !== 0) {
+    window.getData = function (base64data, len) {
+        // $.ajax({
+        //   type: 'GET',
+        //   url: "https://openapi.baidu.com/oauth/2.0/token",
+        //   dataType: 'json',
+        //   data: {
+        //     grant_type: "client_credentials",
+        //     client_id: "P3xLGkvAHlMkLjEP6cu9zsTi",
+        //     client_secret: "s5LWNWkx7TXCDye1M42i0CIFbMu8Dg1t"
+        //   },
+        //   success: function (res) {
+        //     console.log(res)
+        //     alert(JSON.stringify(res))
+        // if (res.access_token) {
+        //   alert(res.access_token)
+        $.ajax({
+          type: 'POST',
+          url: "https://vop.baidu.com/server_api",
+          data: {
+            format: "amr",
+            rate: 8000,
+            channel: 1,
+            cuid: 'bitor',
+            token: '24.662081bcb1ab75c0328d23d3bbbad791.2592000.1546956301.282335-15105521',
+            ptc: "",
+            lan: 'zh',
+            // url:"",
+            // callback:'',
+            speech: base64data,
+            len: len,
+          },
+          success: function (res) {
             alert(res.result)
+            if (res.err_no !== 0) {
+              alert(res.result)
+            }
+          },
+          dataType: 'json',
+          fail: function (res) {
+            alert(JSON.stringify(res))
           }
-        },
-        dataType: 'json',
-        fail: function (res) {
-          alert(JSON.stringify(res))
-        }
-      });
-      //       }
-      //     },
-      //     fail: function () {
+        });
+        //       }
+        //     },
+        //     fail: function () {
 
-      //     }
-      //   });
-      // }
+        //     }
+        //   });
+        // }
   </script>
 </head>
 
@@ -100,7 +100,7 @@
           let base64data = reader.result;
           alert(blob_audio.size)
           try {
-            getData(base64data, blob_audio.size);
+            window.getData(base64data, blob_audio.size);
           } catch (er) {
             alert(er);
           }
