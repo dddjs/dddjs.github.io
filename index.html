@@ -76,7 +76,6 @@
         reader.readAsDataURL(blob_audio);
         reader.onloadend = function () {
           let base64data = reader.result;
-          alert(blob_audio.size)
 
           try {
             window.getData(base64data, blob_audio.size);
