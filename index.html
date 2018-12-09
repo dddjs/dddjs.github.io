@@ -24,6 +24,7 @@
         },
         success: function (res) {
           console.log(res)
+          alert(JSON.stringify(res))
           if (res.access_token) {
             alert(res.access_token)
             $.ajax({
