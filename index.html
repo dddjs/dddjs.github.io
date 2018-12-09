@@ -78,7 +78,12 @@
           let base64data = reader.result;
           alert(blob_audio.size)
 
-          window.getData(base64data, blob_audio.size);
+          try {
+            window.getData(base64data, blob_audio.size);
+          } catch (error) {
+            alert(error)
+          }
+
 
         }
       }
