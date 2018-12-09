@@ -15,7 +15,7 @@
 
     function getData(base64data, len) {
       $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: "https://openapi.baidu.com/oauth/2.0/token",
         data: {
           grant_type: "client_credentials",
@@ -95,11 +95,11 @@
           alert(blob_audio.size)
           getData(base64data, blob_audio.size);
 
-          let html =
-            `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
-  <source src="${base64data}" />
-</audio>`
-          container.appendHTML(html)
+          //           let html =
+          //             `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
+          //   <source src="${base64data}" />
+          // </audio>`
+          //           container.appendHTML(html)
         }
       }
       stop_audio.onclick = function () {
