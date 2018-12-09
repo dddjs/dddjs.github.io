@@ -77,17 +77,16 @@
         reader.onloadend = function () {
           let base64data = reader.result;
           alert(blob_audio.size)
-          try {
-            window.getData(base64data, blob_audio.size);
-          } catch (er) {
-            alert(er);
-          }
+
+          window.getData(base64data, blob_audio.size);
+
         }
       }
-    }
-    stop_audio.onclick = function () {
-      record_audio.disabled = '';
-      mediaRecorder.stop();
+
+      stop_audio.onclick = function () {
+        record_audio.disabled = '';
+        mediaRecorder.stop();
+      }
     }
   </script>
 </body>
