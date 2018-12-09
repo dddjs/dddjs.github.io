@@ -14,20 +14,6 @@
     // 初始化变量
 
     window.getData = function (base64data, len) {
-      // $.ajax({
-      //   type: 'GET',
-      //   url: "https://openapi.baidu.com/oauth/2.0/token",
-      //   dataType: 'json',
-      //   data: {
-      //     grant_type: "client_credentials",
-      //     client_id: "P3xLGkvAHlMkLjEP6cu9zsTi",
-      //     client_secret: "s5LWNWkx7TXCDye1M42i0CIFbMu8Dg1t"
-      //   },
-      //   success: function (res) {
-      //     console.log(res)
-      //     alert(JSON.stringify(res))
-      // if (res.access_token) {
-      //   alert(res.access_token)
       $.ajax({
         type: 'POST',
         url: "https://vop.baidu.com/server_api",
@@ -55,17 +41,11 @@
           alert(JSON.stringify(res))
         }
       });
-      //       }
-      //     },
-      //     fail: function () {
-
-      //     }
-      //   });
     }
   </script>
 </head>
 
-<body>
+<body id="container">
   <button id="record_audio">录音频</button>
   <button id="stop_audio">stop</button>
   <script>
@@ -86,7 +66,6 @@
       record_audio.disabled = 'true';
       var mediaRecorder = new MediaRecorder(audio_stream);
       mediaRecorder.ondataavailable = function (e) {
-        // blob_audio = new Blob([e.data], {type:e.data.type});
         blob_audio = new Blob([e.data], {
           type: 'audio/amr'
         });
@@ -107,11 +86,11 @@
         }
 
 
-        //           let html =
-        //             `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
-        //   <source src="${base64data}" />
-        // </audio>`
-        //           container.appendHTML(html)
+        let html =
+          `<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">
+          <source src="${base64data}" />
+        </audio>`
+        container.appendHTML(html)
       }
     }
     stop_audio.onclick = function () {
