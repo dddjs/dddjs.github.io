@@ -5,7 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>JS Bin</title>
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+    crossorigin="dddjs.github.io"></script>
   <script type="text/javascript">
     // API Key: P3xLGkvAHlMkLjEP6cu9zsTi
     // Secret Key: s5LWNWkx7TXCDye1M42i0CIFbMu8Dg1t
@@ -21,6 +22,33 @@
       },
       success: function (res) {
         console.log(res)
+        if (res.access_token) {
+          alert(res.access_token)
+          // $.ajax({
+          //   type: 'POST',
+          //   url: "http://vop.baidu.com/server_api",
+          //   data: {
+          //     format: "amr",
+          //     rate: 8000,
+          //     channel: 1,
+          //     cuid: 'bitor',
+          //     token: res.access_token,
+          //     ptc: "",
+          //     lan: 'zh',
+          //     // url:"",
+          //     // callback:'',
+          //     speech: "",
+          //     len: ""
+          //   },
+          //   success: function (res) {
+          //     console.log(res)
+          //     if (res.access_token) {
+          //       $
+          //     }
+          //   },
+          //   dataType: 'json'
+          // });
+        }
       },
       dataType: 'json'
     });
