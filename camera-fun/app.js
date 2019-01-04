@@ -41,14 +41,14 @@ button.addEventListener('click', event => {
     video: videoConstraints,
     audio: false
   };
-  navigator.getUserMedia(constraints, stream => {
-    currentStream = stream;
-    video.srcObject = stream;
-    return navigator.mediaDevices.enumerateDevices();
-    // gotDevices
-  }, error => {
-    console.error(error);
-  });
+  // navigator.getUserMedia(constraints, stream => {
+  //   currentStream = stream;
+  //   video.srcObject = stream;
+  //   return navigator.mediaDevices.enumerateDevices();
+  //   // gotDevices
+  // }, error => {
+  //   console.error(error);
+  // });
 
   navigator.mediaDevices.getUserMedia(constraints)
     .then(stream => {
@@ -58,7 +58,7 @@ button.addEventListener('click', event => {
     })
     .then(gotDevices)
     .catch(error => {
-      console.error(error);
+      console.error(error, error.name + ": " + error.message);
     });
 });
 
