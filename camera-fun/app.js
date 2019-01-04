@@ -33,14 +33,24 @@ button.addEventListener('click', event => {
   if (select.value === '') {
     videoConstraints.facingMode = 'environment';
   } else {
-    videoConstraints.deviceId = { exact: select.value };
+    videoConstraints.deviceId = {
+      exact: select.value
+    };
   }
   const constraints = {
     video: videoConstraints,
     audio: false
   };
-  navigator.mediaDevices
-    .getUserMedia(constraints)
+  navigator.getUserMedia(constraints, stream => {
+    currentStream = stream;
+    video.srcObject = stream;
+    return navigator.mediaDevices.enumerateDevices();
+    // gotDevices
+  }, error => {
+    console.error(error);
+  });
+
+  navigator.mediaDevices.getUserMedia(constraints)
     .then(stream => {
       currentStream = stream;
       video.srcObject = stream;
