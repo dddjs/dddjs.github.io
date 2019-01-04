@@ -1,0 +1,287 @@
+<!--
+    Powered By nodeppt - This is probably the best web presentation tool so far!
+    version: 1.4.4
+    site: https://github.com/ksky521/nodeppt
+    date: 
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>About_Egg.js - By 小牛仔</title>
+    <link rel="stylesheet" media="all" href="./css/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./css/phone.css">
+    
+    <link rel="stylesheet" href="./js/highlight/styles/monokai_sublime.css">
+    <link rel="stylesheet" href="./css/font-awesome.css">
+    
+<link rel="stylesheet" href="./css/theme.moon.css">
+</head>
+<body>
+<div class="slides">
+    <slides id="container">
+        <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Egg.js</h1>
+<p>Egg.js 为企业级框架和应用而生</p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>比较</h1>
+<ul>
+<li>Express 是 Node.js 社区广泛使用的框架，简单且扩展性强，非常适合做个人项目。但框架本身缺少约定，标准的 MVC 模型会有各种千奇百怪的写法。</li>
+<li>Egg 按照约定进行开发，奉行『约定优于配置』，团队协作成本低。</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>特点</h1>
+<ul>
+<li>内置多进程管理</li>
+<li>基于 Koa 开发，性能优异</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>begg.js</h1>
+<p><a href="http://begg.alibaba-inc.com/zh-cn/begg/index.html" target="_blank">http://begg.alibaba-inc.com/zh-cn/begg/index.html</a></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<ul>
+<li>Begg 是阿里集团 Node.js 应用 web 框架，基于 Egg.js 开发。</li>
+<li>Begg 基于 Egg.js ，集成了常用的开发插件，并结合阿里 Aone 部署环境开发的 web 应用框架。</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<p>让我们开始</p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<pre><code class="shell">tnpm install @ali/egg-init -g
+ali-egg-init
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<pre><code class="shell">ali-egg-init
+
+? Please select a boilerplate category 
+❯ alibaba 
+  uc 
+  alipay 
+  youku 
+  opensource 
+
+? Please select a boilerplate type
+❯ buc - 适用于基于 buc 的阿里内部应用 
+  ali - 适用于阿里集团对外应用 
+  columbus - 适用于国际站线上应用 
+  lotus - 适用于外综服对外应用 
+  plugin - egg 插件 
+  canary - 适用于信息平台 Nodejs 应用
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>运行</h1>
+<pre><code class="shell">tnpm install
+npm run dev
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<ul>
+<li>app/router.js 用于配置 URL 路由规则，具体参见 Router。</li>
+<li>app/controller/** 用于解析用户的输入，处理后返回相应的结果，具体参见 Controller。</li>
+<li>app/service/** 用于编写业务逻辑层，可选，建议使用，具体参见 Service。</li>
+<li>app/middleware/** 用于编写中间件，可选，具体参见 Middleware。</li>
+<li>app/public/** 用于放置静态资源，可选，具体参见内置插件 egg-static。</li>
+<li>app/extend/** 用于框架的扩展，可选，具体参见框架扩展。</li>
+<li>config/config.{env}.js 用于编写配置文件，具体参见配置。</li>
+<li>config/plugin.js 用于配置需要加载的插件，具体参见插件开发。</li>
+<li>test/** 用于单元测试，具体参见单元测试。</li>
+<li>app.js 和 agent.js 用于自定义启动时的初始化工作，可选，具体参见启动自定义。关于agent.js的作用参见Agent机制。</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Router</h1>
+<p>Router 主要用来描述请求 URL 和具体承担执行动作的 Controller 的对应关系
+<a href="https://eggjs.org/zh-cn/basics/router.html" target="_blank">https://eggjs.org/zh-cn/basics/router.html</a></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Controller</h1>
+<p>负责解析用户的输入，处理后返回相应的结果
+<a href="https://eggjs.org/zh-cn/basics/controller.html" target="_blank">https://eggjs.org/zh-cn/basics/controller.html</a></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Service</h1>
+<p>Service 就是在复杂业务场景下用于做业务逻辑封装的一个抽象层
+<a href="https://eggjs.org/zh-cn/basics/service.html" target="_blank">https://eggjs.org/zh-cn/basics/service.html</a></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>多进程模型和进程间通讯</h1>
+<p><a href="https://eggjs.org/zh-cn/core/cluster-and-ipc.html" target="_blank">https://eggjs.org/zh-cn/core/cluster-and-ipc.html</a></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<pre><code>+---------+           +---------+          +---------+
+|  Master |           |  Agent  |          |  Worker |
++---------+           +----+----+          +----+----+
+     |      fork agent     |                    |
+     +--------------------&gt;|                    |
+     |      agent ready    |                    |
+     |&lt;--------------------+                    |
+     |                     |     fork worker    |
+     +-----------------------------------------&gt;|
+     |     worker ready    |                    |
+     |&lt;-----------------------------------------+
+     |      Egg ready      |                    |
+     +--------------------&gt;|                    |
+     |      Egg ready      |                    |
+     +-----------------------------------------&gt;|
+</code></pre><ul>
+<li>Master 启动后先 fork Agent 进程</li>
+<li>Agent 初始化成功后，通过 IPC 通道通知 Master</li>
+<li>Master 再 fork 多个 App Worker</li>
+<li>App Worker 初始化成功，通知 Master</li>
+<li>所有的进程初始化成功后，Master 通知 Agent 和 Worker 应用启动成功*</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Master VS Agent VS Worker</h1>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>进程数量</th>
+<th>作用</th>
+<th>稳定性</th>
+<th>是否运行业务代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Master</td>
+<td>1</td>
+<td>进程管理，进程间消息转发</td>
+<td>非常高</td>
+<td>否</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>1</td>
+<td>后台运行工作（长连接客户端）</td>
+<td>高</td>
+<td>少量</td>
+</tr>
+<tr>
+<td>Worker</td>
+<td>一般设置为 CPU 核数</td>
+<td>执行业务代码</td>
+<td>一般</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Mysql</h1>
+<p>提供了 egg-mysql 插件来访问 MySQL 数据库</p>
+<pre><code class="shell">npm i --save egg-mysql
+
+// config/plugin.js
+exports.mysql = {
+  enable: true,
+  package: &#39;egg-mysql&#39;,
+};
+</code></pre>
+<p><a href="https://eggjs.org/zh-cn/tutorials/mysql.html" target="_blank">https://eggjs.org/zh-cn/tutorials/mysql.html</a></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>部署</h1>
+<p>todo...</p>
+
+</article></section></slide>
+        
+
+        <!-- <slide class="slide logoslide dark nobackground">
+            <article class="flexbox vcenter">
+                <h2 style="color: white;">Powered By nodeppt v1.4.4</h2>
+            </article>
+        </slide> -->
+        <div class="slideTip" id="tip"></div>
+    </slides>
+</div>
+<canvas id="drawBoard" class="draw-board" width="900" height="700"></canvas>
+<div class="progress"><span id="progress"></span></div>
+<div id="_buttons">
+    <div class="_btn-box" id="_btn-box" style="display:none;">
+        <button class="fa fa-arrow-circle-left" id="_btn-prev"></button>
+        <button class="fa fa-arrow-circle-right" id="_btn-next"></button>
+        <button class="fa fa-paint-brush" id="_btn-brush"></button>
+        <button class="fa fa-compress" id="_btn-overview" data-toggle="fa fa-expand"></button>
+    </div>
+    <button class="fa fa-bars" id="_btn-bar"  data-toggle="fa fa-close"></button>
+</div>
+<script src="./js/mixjs/lib/mix.0.3.0.min.js"></script>
+<script>
+    var ASSET_RELATIVE_DIR = ".";
+</script>
+<script>
+var base = location.protocol + '//' + location.host;
+
+var path = (location.pathname + '#').split('/').filter(function(v){
+    return !!v;
+});
+path.pop();
+path = path.join('/');
+if (typeof ASSET_RELATIVE_DIR === 'string') {
+    path = path + '/' + ASSET_RELATIVE_DIR;
+}
+MixJS.config({
+    baseURL: [ base, path, 'js'].join('/')+'/'
+});
+
+</script>
+<script src="./js/mixjs/lib/event/broadcast.js"></script>
+<script src="./js/nodeppt.js"></script>
+<script>
+Slide.init({
+    containerID: 'container',
+    drawBoardID: 'drawBoard',
+    slideClass: '.slide',
+    buildClass: '.build',
+    progressID: 'progress',
+    transition: 'move',
+    width: 1100,
+    dir: './',
+    
+    //打开下面的注释就开启postMessage方式
+    //访问网址127.0.0.1:8080/ppt/demo#client
+    control:{
+        type: 'postMessage',
+        args:{
+            isControl:  false
+        }
+    },
+    
+    tipID: 'tip'
+});
+MixJS.loadJS('highlight/highlight.pack.js',function(){
+    hljs.tabReplace = '  ';
+    hljs.initHighlightingOnLoad();
+});
+</script>
+
+
+<!--placeholder-->
+</body>
+</html>

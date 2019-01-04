@@ -1,0 +1,278 @@
+<!--
+    Powered By nodeppt - This is probably the best web presentation tool so far!
+    version: 1.4.4
+    site: https://github.com/ksky521/nodeppt
+    date: 
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>puppeteer.js - By 小牛仔</title>
+    <link rel="stylesheet" media="all" href="./css/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./css/phone.css">
+    
+    <link rel="stylesheet" href="./js/highlight/styles/monokai_sublime.css">
+    <link rel="stylesheet" href="./css/font-awesome.css">
+    
+<link rel="stylesheet" href="./css/theme.moon.css">
+</head>
+<body>
+<div class="slides">
+    <slides id="container">
+        <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>puppeteer.js</h1>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>headless browser</h1>
+<img src="./puppeteer_01.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Chromium drivers</h1>
+<img src="./puppeteer_02.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>puppeteer vs phantomjs</h1>
+<img src="./puppeteer_03.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>puppeteer vs phantomjs</h1>
+<img src="./puppeteer_04.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<p>Puppeteer 是一个node库，他提供了一组用来操纵Chrome的API，Puppeteer是Chrome官方团队进行维护的</p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<img src="./puppeteer_05.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>launch</h1>
+<pre><code class="javascript">const puppeteer = require(&#39;puppeteer&#39;);
+const utils = require(&#39;../utils&#39;);
+
+(async () =&gt; {
+  const browser = await puppeteer.launch({
+    dumpio: true,
+    ignoreHTTPSErrors: true,
+    headless: false,
+    args: [&#39;--window-size=1920,1080&#39;],
+    timeout: 10 * 1000,
+    devtools: false
+  });
+
+  const page = await browser.newPage();
+
+  await page.setViewport({width:1920, height:1080});
+  await page.goto(&#39;http://www.taobao.com&#39;);
+  await utils.wait(5000);
+  await page.close();
+  await utils.wait(1000);
+  await browser.close();
+})().catch(err =&gt; console.log(err));
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>utils</h1>
+<pre><code class="javascript">exports.wait = function (time = 10 * 1000) {
+  return new Promise(function(resolve, reject) {
+    setTimeout(() =&gt; {
+      resolve();
+    }, time);
+  });
+}
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>dom</h1>
+<pre><code class="javascript">const page = await browser.newPage();
+
+await page.setViewport({width:1920, height:1080});
+await page.goto(&#39;http://www.taobao.com&#39;, {
+  waitUntil: &#39;networkidle0&#39;
+});
+
+const position = await page.$eval(&#39;.J_MemberLogout .ml1&#39;, btn =&gt; {
+  return {
+    x: btn.getBoundingClientRect().x,
+    y: btn.getBoundingClientRect().y
+  }
+});
+
+await page.mouse.click(position.x + 10, position.y + 10);
+await utils.wait(5000);
+await page.close();
+await browser.close();
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>evaluate</h1>
+<pre><code class="javascript">const page = await browser.newPage();
+
+await page.setViewport({width:1920, height:1080});
+await page.goto(&#39;http://www.taobao.com&#39;, {
+  waitUntil: &#39;networkidle0&#39;
+});
+
+const keys = await page.evaluate(() =&gt; {
+  return Object.keys(localStorage);
+});
+
+console.log(keys);
+await utils.wait(5000);
+await page.close();
+await browser.close();
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>login</h1>
+<pre><code class="javascript">const page = await browser.newPage();
+
+await page.setViewport({width:1920, height:1080});
+await page.goto(&#39;https://login.taobao.com/member/login.jhtml&#39;, {
+  waitUntil: &#39;networkidle0&#39;
+});
+
+await page.$eval(&#39;#J_Quick2Static&#39;, btn =&gt; {
+  btn.click();
+});
+await page.$eval(&#39;#TPL_username_1&#39;, input =&gt; {
+  input.value = &#39;影逸&#39;;
+});
+await page.$eval(&#39;#TPL_password_1&#39;, input =&gt; {
+  input.value = &#39;xxxxxxx&#39;;
+})
+await page.$eval(&#39;#J_SubmitStatic&#39;, button =&gt; {
+  button.click();
+});
+await utils.wait(5000);
+await page.close();
+await browser.close();
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>screenshot</h1>
+<pre><code class="javascript">const page = await browser.newPage();
+
+await page.setViewport({width:1920, height:1080});
+await page.goto(&#39;https://www.taobao.com&#39;, {
+  waitUntil: &#39;networkidle0&#39;
+});
+
+let scrollStep = 500;
+let scrollEnable = true;
+
+while (scrollEnable) {
+  scrollEnable = await page.evaluate((scrollStep) =&gt; {
+    let scrollTop = document.scrollingElement.scrollTop;
+
+    document.scrollingElement.scrollTop = scrollTop + scrollStep;
+
+    return document.body.clientHeight &gt; (scrollTop + 1080);
+  }, scrollStep)
+
+  await utils.wait(1000);
+}
+
+await page.screenshot({path: &#39;./taobao.png&#39;, fullPage: true});
+await page.close();
+await browser.close();
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>参考</h1>
+<ul>
+<li><a href="https://hackernoon.com/benchmark-headless-chrome-vs-phantomjs-e7f44c6956c" target="_blank">https://hackernoon.com/benchmark-headless-chrome-vs-phantomjs-e7f44c6956c</a></li>
+<li><a href="https://github.com/dhamaniasad/HeadlessBrowsers" target="_blank">https://github.com/dhamaniasad/HeadlessBrowsers</a></li>
+<li><a href="http://www.r9it.com/20171106/puppeteer.html" target="_blank">http://www.r9it.com/20171106/puppeteer.html</a></li>
+<li><a href="https://peter.sh/experiments/chromium-command-line-switches/#window-size" target="_blank">https://peter.sh/experiments/chromium-command-line-switches/#window-size</a></li>
+</ul>
+
+</article></section></slide>
+        
+
+        <!-- <slide class="slide logoslide dark nobackground">
+            <article class="flexbox vcenter">
+                <h2 style="color: white;">Powered By nodeppt v1.4.4</h2>
+            </article>
+        </slide> -->
+        <div class="slideTip" id="tip"></div>
+    </slides>
+</div>
+<canvas id="drawBoard" class="draw-board" width="900" height="700"></canvas>
+<div class="progress"><span id="progress"></span></div>
+<div id="_buttons">
+    <div class="_btn-box" id="_btn-box" style="display:none;">
+        <button class="fa fa-arrow-circle-left" id="_btn-prev"></button>
+        <button class="fa fa-arrow-circle-right" id="_btn-next"></button>
+        <button class="fa fa-paint-brush" id="_btn-brush"></button>
+        <button class="fa fa-compress" id="_btn-overview" data-toggle="fa fa-expand"></button>
+    </div>
+    <button class="fa fa-bars" id="_btn-bar"  data-toggle="fa fa-close"></button>
+</div>
+<script src="./js/mixjs/lib/mix.0.3.0.min.js"></script>
+<script>
+    var ASSET_RELATIVE_DIR = ".";
+</script>
+<script>
+var base = location.protocol + '//' + location.host;
+
+var path = (location.pathname + '#').split('/').filter(function(v){
+    return !!v;
+});
+path.pop();
+path = path.join('/');
+if (typeof ASSET_RELATIVE_DIR === 'string') {
+    path = path + '/' + ASSET_RELATIVE_DIR;
+}
+MixJS.config({
+    baseURL: [ base, path, 'js'].join('/')+'/'
+});
+
+</script>
+<script src="./js/mixjs/lib/event/broadcast.js"></script>
+<script src="./js/nodeppt.js"></script>
+<script>
+Slide.init({
+    containerID: 'container',
+    drawBoardID: 'drawBoard',
+    slideClass: '.slide',
+    buildClass: '.build',
+    progressID: 'progress',
+    transition: 'move',
+    width: 1100,
+    dir: './',
+    
+    //打开下面的注释就开启postMessage方式
+    //访问网址127.0.0.1:8080/ppt/demo#client
+    control:{
+        type: 'postMessage',
+        args:{
+            isControl:  false
+        }
+    },
+    
+    tipID: 'tip'
+});
+MixJS.loadJS('highlight/highlight.pack.js',function(){
+    hljs.tabReplace = '  ';
+    hljs.initHighlightingOnLoad();
+});
+</script>
+
+
+<!--placeholder-->
+</body>
+</html>

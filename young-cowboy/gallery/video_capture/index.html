@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Capture Video</title>
+  <style type="text/css">
+    *{padding: 0; margin: 0;}
+    video{
+      width: 320px;
+      height: 240px;
+    }
+  </style>
+</head>
+<body>
+  <video 
+    controls 
+    autoplay
+    loop 
+    id="video"
+    src="https://young-cowboy.github.io/gallery/video-canvas/video.mp4" crossorigin="anonymous">
+  </video>
+  <script type="text/javascript">
+    var video = document.getElementById('video');
+
+    video.addEventListener('loadedmetadata', function(e){
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext("2d");
+      
+      canvas.width = 320;
+      canvas.height = 180;
+      video.play();
+      // setInterval(function (){
+      //   ctx.drawImage(video, 0, 0, 320, 180);
+      //   document.getElementById('src').src = canvas.toDataURL();
+      // }, 500)
+    });
+  </script>
+</body>
+</html>

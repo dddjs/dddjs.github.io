@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>capturing video and video</title>
+</head>
+<body>
+  <script type="text/javascript">
+    // polyfill
+    // getUserMedia 被标准废除了，mediaDevices 正在取代中
+    if (navigator.mediaDevices === undefined) {
+        navigator.mediaDevices = {};
+    }
+
+    if (navigator.mediaDevices.getUserMedia === undefined) {
+        navigator.mediaDevices.getUserMedia = function(constraints) {
+            var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+            if (!getUserMedia) {
+                return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+            }
+            return new Promise(function(resolve, reject) {
+                getUserMedia.call(navigator, constraints, resolve, reject);
+            });
+        }
+    }
+
+    window.URL = (window.URL || window.webkitURL || window.mozURL || window.msURL);
+  </script>
+  <video 
+    id="video"
+    autoplay="autoplay" 
+    controls="controls" 
+    style="width: 320px;height: 180px;background-color: #000000;"></video>
+  <script type="text/javascript">
+    var constraints = {
+      audio: false,
+      video: { 
+        width: 160,
+        height: 90,
+        facingMode: "environment",
+        frameRate: { 
+          ideal: 10, 
+          max: 15 
+        }
+      }
+    };
+
+    navigator
+      .mediaDevices
+      .getUserMedia(constraints)
+      .then(function(mediaStream) {
+        var video = document.querySelector('video');
+
+        if ("srcObject" in video) {
+          video.srcObject = mediaStream
+        } else {
+          video.src = window.URL && window.URL.createObjectURL(mediaStream) || stream
+        }
+
+        video.onloadedmetadata = function(e) {
+          video.play();
+        };
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    navigator
+      .mediaDevices
+      .enumerateDevices()
+      .then(function(MediaDeviceInfo) {
+        console.log(MediaDeviceInfo);
+      })
+
+    navigator
+      .mediaDevices
+      .getSupportedConstraints()
+  </script>
+</body>
+</html>

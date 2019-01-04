@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>video Convolution</title>
+  <style type="text/css">
+    *{margin:0 ;padding: 0;}
+    .wrap{
+      width: 990px;
+      margin: auto;
+    }
+    .video{
+      width: 400px;
+      height: 225px;
+    }
+    .canvas{
+      background-color: #000;
+      width: 200px;
+      height: 112px;
+    }
+    #content{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+    #content h1{
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    #content > div{
+      width: 200px;
+      margin-right: 20px;
+    }
+  </style>
+  <script type="text/javascript" src="./effect.js"></script>
+  <script type="text/javascript">
+    var effect_name = [
+      { name : "normal", description : "无处理"},
+      { name : "blur", description : "模糊"},
+      { name : "contrast", description : "对比度增强"},
+      { name : "deEmphasize", description : "灰度"},
+      { name : "edgeDetection", description : "横向边缘检测"},
+      { name : "embossing", description : "浮雕处理"},
+      { name : "light", description : "亮度调整"},
+      { name : "opacity", description : "透明处理"},
+      { name : "opposite", description : "反色"},
+      { name : "sharpness", description : "锐化"},
+      { name : "sobelEdgeDetection", description : "索贝尔横向边缘检测"}
+    ]
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <h1>video</h1>
+    <video 
+      class="video" 
+      id="video" 
+      src="./video.mp4" 
+      controls="controls"></video>
+    <h1>特效</h1>
+    <div id="content"></div>
+  </div>
+  <script type="text/javascript">
+    (function (){
+      var video = document.getElementById("video");
+      var content = document.getElementById("content");
+      var requestAnimationFrameId = 0;
+
+      video.crossOrigin = "Anonymous";
+
+      function createDom(info){
+        var title = document.createElement("h1");
+        var canvas = document.createElement("canvas");
+        var div = document.createElement("div");
+
+        title.innerHTML = info.description;
+        canvas.width = 200;
+        canvas.height = 112;
+        canvas.id = info.name;
+        canvas.classList.add("canvas");
+
+        div.appendChild(title);
+        div.appendChild(canvas);
+
+        return div
+      }
+
+      effect_name.forEach(function (info){
+        content.appendChild(createDom(info));
+      });
+
+      function drawVideo(){
+        effect_name.forEach(function (info){
+          var canvas = document.getElementById(info.name);
+          var ctx = canvas.getContext("2d");
+
+          ctx.drawImage(video, 0, 0, 200, 112);
+
+          var canvasData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+          canvasData = effect[info.name](canvasData);
+          
+          ctx.putImageData(canvasData, 0, 0);
+        });
+
+        requestAnimationFrameId = requestAnimationFrame(drawVideo);
+      }
+
+      function cancelDraw(){
+        cancelAnimationFrame(requestAnimationFrameId);
+      }
+
+      video.addEventListener("canplay", function (){
+
+        
+        video.addEventListener("play", function (){
+         drawVideo(); 
+        });
+        video.addEventListener("pause", function (){
+         cancelDraw(); 
+        });
+        drawVideo();
+      });
+
+    })()
+  </script>
+</body>
+</html>

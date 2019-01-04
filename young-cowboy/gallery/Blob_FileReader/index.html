@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blob FileReader</title>
+</head>
+<body>
+  <input type="file" id="input">
+  <script type="text/javascript">
+    var input = document.getElementById("input");
+
+    input.addEventListener('change', function (e){
+      var file = this.files[0].slice(0, 4);
+      var reader = new FileReader();
+
+      reader.readAsArrayBuffer(file);
+      reader.addEventListener('load', function (e){
+        var buffer = reader.result;
+        var meta = view.getUint32(0, false);  
+        // big endian 大端字节序，读取。只有读取的时候，才必须区分字节序，其他情况都不用考虑。
+        var view = new DataView(reader.result);
+
+        switch(meta){
+          case 0xffd8ffe1: alert('EXIF JPEG');break;
+          case 0xffd8ffe0: alert('JFIF JPEG');break;
+          case 0xb1bec8ed: alert('text');break;
+          case 0x47494638: alert('gif');break;
+          default: alert('unkown')
+        }
+
+      });
+    });
+  </script>
+</body>
+</html>

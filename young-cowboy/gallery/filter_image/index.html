@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Filter Image</title>
+  <style type="text/css">
+    *{margin: 0px;padding: 0px;}
+    body{
+      padding: 50px;
+    }
+    img{
+      width: 200px;
+      height: 200px;
+      margin-bottom: 10px;
+      margin-right: 10px;
+    }
+    #gallery{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  </style>
+  <script type="text/javascript" src="./effect.js"></script>
+</head>
+<body>
+  <div id="source"></div>
+  <div id="gallery"></div>
+  <script type="text/javascript">
+    var source = document.getElementById('source');
+    var gallery = document.getElementById('gallery');
+    var url = 'https://img.alicdn.com/tfs/TB1vIhSQXXXXXXFaXXXXXXXXXXX-1376-1366.png_200x200.jpg';
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', url);
+    xhr.responseType = 'blob'; // 指定下载类型
+    xhr.send();
+
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState == 4 && xhr.status == 200){
+        var image = new Image();
+
+        // 创建图片链接
+        image.src = URL.createObjectURL(xhr.response);
+        image.onload = function (){
+          var canvas = document.createElement('canvas');
+          var ctx = canvas.getContext("2d");
+          
+          canvas.width = 200;
+          canvas.height = 200;
+          ctx.drawImage(image, 0, 0);
+            
+          // 获取图片的RGBA数据
+          var canvasData = ctx.getImageData(0, 0, 200, 200);
+
+          // 遍历滤镜算法
+          Object.keys(effect).forEach(function (key){
+            var image = filterImage(key, canvasData);
+
+            gallery.appendChild(image);
+          });
+        };
+
+        source.appendChild(image);
+      }
+
+      // 添加文字
+      function fillText(ctx, text){
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#000000";
+        ctx.shadowBlur = 10;
+        ctx.textAlign = "center"; 
+        ctx.fillText(text, 100, 180);
+      }
+
+      // 处理RGBA
+      function filterImage(type, canvasData){
+        var image = new Image();
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext("2d");
+        var filter = effect[type];
+
+        canvas.width = 200;
+        canvas.height = 200;
+        ctx.putImageData(filter(canvasData), 0, 0);
+
+        fillText(ctx, type);
+        image.src = canvas.toDataURL();
+
+        return image;
+      }
+    }
+  </script>
+</body>
+</html>

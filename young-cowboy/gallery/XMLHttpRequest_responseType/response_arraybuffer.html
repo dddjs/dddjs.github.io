@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>text</title>
+</head>
+<body>
+  <img id="image">
+  <script type="text/javascript">
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', './assets/arraybuffer');
+    xhr.responseType = 'arraybuffer';
+    xhr.send();
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState == 4 && xhr.status == 200){
+        var blob = new Blob([xhr.response], {type: 'image/png'});
+        
+        document.getElementById('image').src = URL.createObjectURL(blob); // 这里设置一个张图片
+      }
+    }
+  </script>
+</body>
+</html>

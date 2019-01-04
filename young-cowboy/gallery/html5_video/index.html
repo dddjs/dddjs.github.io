@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>HTML5 Video</title>
+  <style type="text/css">
+    *{margin: 0;padding: 0;}
+    ul{list-style: none;}
+    html, body{
+      height: 100%;
+      width: 100%;
+      background-color: #000000;
+      color: #ffffff;
+      font-family: "Open Sans",arial,sans-serif;
+    }
+    .wrap{
+      padding: 50px;
+      padding-bottom: 0;
+      display: flex;
+      flex-direction: row;
+    }
+    .video{
+      width: 480px;
+      height: 270px;
+      flex-shrink: 0;
+    }
+    .operation{
+      margin-left: 10px;
+    }
+    button{
+      padding: 3px 8px;
+      font-size: 14px;
+      background-color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      margin-right: 5px;
+    }
+    #attributes{
+      flex-shrink: 0;
+      margin-left: 50px;
+      line-height: 1.5;
+    }
+    #console{
+      width: 500px;
+      height: 300px;
+      overflow-y: scroll;
+    }
+    #console p {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div>
+      <video 
+        controls
+        autoplay 
+        class="video"
+        id="video" 
+        webkit-playsinline="webkit-playsinline"
+        playsinline="playsinline"
+        src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"></video>
+      <div id="console"></div>
+    </div>
+    <ul class="operation">
+      <li>
+        <button class="btn" data-type="play">play()</button>
+        <button class="btn" data-type="pause">pause()</button>
+        <button class="btn" data-type="load">load()</button>
+      </li>
+      <li>
+        <button class="btn" data-type="volume++">volume++</button>
+        <button class="btn" data-type="volume--">volume--</button>
+      </li>
+      <li>
+        <button class="btn" data-type="playbackRate++">playbackRate++</button>
+        <button class="btn" data-type="playbackRate--">playbackRate--</button>
+      </li>
+      <li>
+        <button class="btn" data-type="currentTime++">currentTime++</button>
+        <button class="btn" data-type="currentTime--">currentTime--</button>
+        <button class="btn" data-type="currentTime=5">currentTime=5</button>
+      </li>
+      <li>
+        <button class="btn" data-type="muted=true">muted=true</button>
+        <button class="btn" data-type="muted=false">muted=false</button>
+      </li>
+      <li>
+        <button class="btn" data-type="controls=true">controls=true</button>
+        <button class="btn" data-type="controls=false">controls=false</button>
+      </li>
+    </ul>
+    <div id="attributes"></div>
+  </div>
+  <script type="text/javascript">
+    var ATTRIBUTES = ['autoplay', 'preload', 'controls', 'loop', 'poster', 'height', 'width', 'muted', 'src', 'currentSrc', 'duration', 'ended', 'paused', 'playbackRate', 'seekable', 'seeking', 'volume', 'buffered', 'networkState', 'readyState', 'currentTime'];
+    var EVENT_MAP = [
+      'abort|在播放被终止时触发,例如, 当播放中的视频重新开始播放时会触发这个事件。',
+      'canplay|媒体数据已经有足够的数据（至少播放数帧）可供播放时触发。这个事件对应CAN_PLAY的readyState。',
+      'canplaythrough|在媒体的readyState变为CAN_PLAY_THROUGH时触发，表明媒体可以在保持当前的下载速度的情况下不被中断地播放完毕。注意：手动设置currentTime会使得firefox触发一次canplaythrough事件，其他浏览器或许不会如此。',
+      'durationchange|元信息已载入或已改变，表明媒体的长度发生了改变。例如，在媒体已被加载足够的长度从而得知总长度时会触发这个事件。',
+      'emptied|媒体被清空（初始化）时触发。',
+      'ended|播放结束时触发。',
+      'error|在发生错误时触发。元素的error属性会包含更多信息。参阅Error handling获得详细信息。',
+      'loadeddata| 媒体的第一帧已经加载完毕。',
+      'loadedmetadata| 媒体的元数据已经加载完毕，现在所有的属性包含了它们应有的有效信息。',
+      'loadstart|在媒体开始加载时触发。',
+      'pause|播放暂停时触发。',
+      'play| 在媒体回放被暂停后再次开始时触发。即，在一次暂停事件后恢复媒体回放。',
+      'playing|在媒体开始播放时触发（不论是初次播放、在暂停后恢复、或是在结束后重新开始）。',
+      'progress|告知媒体相关部分的下载进度时周期性地触发。有关媒体当前已下载总计的信息可以在元素的buffered属性中获取到。',
+      'ratechange|在回放速率变化时触发。',
+      'seeked|在跳跃操作完成时触发。',
+      'seeking|在跳跃操作开始时触发。',
+      'stalled|在尝试获取媒体数据，但数据不可用时触发。',
+      'suspend|在媒体资源加载终止时触发，这可能是因为下载已完成或因为其他原因暂停。',
+      'timeupdate|元素的currentTime属性表示的时间已经改变。',
+      'volumechange|在音频音量改变时触发（既可以是volume属性改变，也可以是muted属性改变）.。',
+      'waiting|在一个待执行的操作（如回放）因等待另一个操作（如跳跃或下载）被延迟时触发。'
+    ];
+    var video = document.querySelector('#video');
+    var btn = document.querySelectorAll('.btn');
+    var log = document.querySelector("#console");
+    
+    function prependChild(o,s){ 
+      if(s.hasChildNodes()){ 
+        s.insertBefore(o,s.firstChild); 
+      }else{ 
+        s.appendChild(o); 
+      } 
+    }
+
+    EVENT_MAP.forEach(function (event){
+      var type = event.split("|")[0];
+      var msg = event.split("|")[1];
+
+      video.addEventListener(type, function(e) {
+        var item = document.createElement("p");
+
+        item.innerHTML = type + "  : " + msg;
+        prependChild(item, log);
+
+        if(type === 'timeupdate'){
+          getAttribute();
+        }
+      });
+    })
+
+    function getAttribute(){
+      var info = [];
+
+      ATTRIBUTES.forEach(function(attribute){
+        info.push(attribute + " : " + video[attribute])
+      });
+
+      document.querySelector('#attributes').innerHTML = info.join('<br>');
+    }
+
+    getAttribute();
+
+    btn.forEach(function(item) {
+      item.addEventListener('click', function(e){
+        var button = e.currentTarget;
+        var dataset = button.dataset;
+        var type = dataset.type;
+
+        if(type === 'play'){
+          video.play();
+        }
+
+        if(type === 'pause'){
+          video.pause();
+        }
+
+        if(type === 'load'){
+          video.src = 'https://young-cowboy.github.io/gallery/video-canvas/video.mp4';
+          video.pause();
+        }
+
+        if(type === "volume++"){
+          video.volume += 0.1;
+        }
+
+        if(type === "volume--"){
+          video.volume -= 0.1;
+        }
+
+        if(type === "playbackRate++"){
+          video.playbackRate += 0.1;
+        }
+
+        if(type === "playbackRate--"){
+          video.playbackRate -= 0.1;
+        }
+
+        if(type === "currentTime++"){
+          video.currentTime += video.currentTime;
+        }
+
+        if(type === "currentTime--"){
+          video.currentTime -= video.currentTime;
+        }
+
+        if(type === "currentTime=5"){
+          video.currentTime = 5;
+        }
+
+        if(type === 'muted=false'){
+          video.muted = false;
+        }
+
+        if(type === 'muted=true'){
+          video.muted = true;
+        }
+
+        if(type === 'controls=false'){
+          video.controls = false;
+        }
+
+        if(type === 'controls=true'){
+          video.controls = true;
+        }
+      });
+    })
+
+  </script>
+</body>
+</html>

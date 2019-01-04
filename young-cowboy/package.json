@@ -1,0 +1,23 @@
+{
+  "name": "young-cowboy.github.io",
+  "version": "1.0.0",
+  "description": "just for site",
+  "main": "index.js",
+  "scripts": {
+    "ppt:dev": "nodeppt start -d ppt_readme",
+    "ppt:build": "nodeppt release ./ppt_readme ./ppt -a"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/young-cowboy/young-cowboy.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/young-cowboy/young-cowboy.github.io/issues"
+  },
+  "homepage": "https://github.com/young-cowboy/young-cowboy.github.io#readme",
+  "devDependencies": {
+    "nodeppt": "^1.4.4"
+  }
+}

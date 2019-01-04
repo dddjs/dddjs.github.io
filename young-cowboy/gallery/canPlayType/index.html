@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTML5 Media - types and codecs examples + canPlayType(type) test</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="./jsHelperClass.js"></script>
+    
+    <style type="text/css">
+      body {font: 14px arial, helvetica, sans-serif;}
+      table {border-collapse: separate; border-spacing: 0 0; font: 11px arial, helvetica, sans-serif;}
+      table thead {text-align: center; font-size: 12px; font-weight: bold; background: #d1d1d1; text-shadow: 0 1px 1px rgba(247,247,247,0.8);}
+      table th, table td  {border: 1px solid #9d9d9d; border-right: 0; border-bottom: 0; padding: 5px 10px;}
+      table th:nth-child(5), table td:nth-child(5) {border-right: 1px solid #9d9d9d;}
+      
+      table tr td {text-align: center;}
+      table tr td:nth-child(1) {width: 80px;}
+      table tr td:nth-child(2) {width: 120px;}
+      table tr td:nth-child(3) {width: 300px;}
+      table tr td:nth-child(4) {width: 130px;}
+      table tr td:nth-child(5) {font: 11px "Courier New", Courier, monospace; text-align: left;}
+      
+      table tfoot td {padding: 5px; text-align: left; font-weight: bold; font-style: italic; border: 0; border-top: 1px solid #9d9d9d;}
+      
+      .red {
+        background: #FF6347;
+      }
+      .green {
+        background: lightgreen;
+      }
+      .orange {
+        background: #F9E186;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>copy from http://www.leanbackplayer.com/test/h5mt.html</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Extension</th>
+          <th>Video MIME type</th>
+          <th>type='...; codecs="..."'</th>
+          <th>canPlayType(type)</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="h5vat">
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5">Note: HTML5 Video + Audio</td>
+        </tr>
+      </tfoot>
+    </table>
+    <br/><br/>
+    <table>
+      <thead>
+        <tr>
+          <th>Extension</th>
+          <th>Video MIME type</th>
+          <th>type='...; codecs="..."'</th>
+          <th>canPlayType(type)</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="h5vt">
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5">Note: HTML5 Video only</td>
+        </tr>
+      </tfoot>
+    </table>
+    <br/><br/>
+    <table>
+      <thead>
+        <tr>
+          <th>Extension</th>
+          <th>Audio MIME type</th>
+          <th>type='...; codecs="..."'</th>
+          <th>canPlayType(type)</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="h5at">
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5">Note: HTML5 Audio only</td>
+        </tr>
+      </tfoot>
+    </table>
+    <script type="text/javascript">
+        /** H.264 Constrained baseline profile video (main and extended video compatible) level 3 and Low-Complexity AAC audio in MP4 container
+          <source src='video.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+          H.264 Extended profile video (baseline-compatible) level 3 and Low-Complexity AAC audio in MP4 container
+          <source src='video.mp4' type='video/mp4; codecs="avc1.58A01E, mp4a.40.2"'>
+          H.264 Main profile video level 3 and Low-Complexity AAC audio in MP4 container
+          <source src='video.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'>
+          H.264 'High' profile video (incompatible with main, baseline, or extended profiles) level 3 and Low-Complexity AAC audio in MP4 container
+          <source src='video.mp4' type='video/mp4; codecs="avc1.64001E, mp4a.40.2"'>
+          MPEG-4 Visual Simple Profile Level 0 video and Low-Complexity AAC audio in MP4 container
+          <source src='video.mp4' type='video/mp4; codecs="mp4v.20.8, mp4a.40.2"'>
+          MPEG-4 Advanced Simple Profile Level 0 video and Low-Complexity AAC audio in MP4 container
+          <source src='video.mp4' type='video/mp4; codecs="mp4v.20.240, mp4a.40.2"'>
+          WebM video and Vorbis audio in Webm container
+          <source src='video.webm' type='video/webm; codecs="vp8, vorbis"'>
+          Theora video and Vorbis audio in Ogg container
+          <source src='video.ogv' type='video/ogg; codecs="theora, vorbis"'>
+          Theora video and Speex audio in Ogg container
+          <source src='video.ogv' type='video/ogg; codecs="theora, speex"'>
+          Dirac video and Vorbis audio in Ogg container
+          <source src='video.ogv' type='video/ogg; codecs="dirac, vorbis"'>
+          MPEG-4 Visual Simple Profile Level 0 video and AMR audio in 3GPP container
+          <source src='video.3gp' type='video/3gpp; codecs="mp4v.20.8, samr"'>
+          Theora video and Vorbis audio in Matroska container
+          <source src='video.mkv' type='video/x-matroska; codecs="theora, vorbis"'>
+          
+          --- AUDIO ---
+          Low-Complexity AAC audio in MP4 container
+          <source src='audio.mp4' type='audio/mp4; codecs=mp4a.40.2'>
+          MPEG Audio Layer 3 in Ogg container
+          <source src='audio.mp3' type='audio/mpeg; codecs=vorbis'>
+          Vorbis audio in Ogg container
+          <source src='audio.ogg' type='audio/ogg; codecs=vorbis'>
+          Speex audio in Ogg container
+          <source src='audio.spx' type='audio/ogg; codecs=speex'>
+          FLAC audio in Ogg container
+          <source src='audio.oga' type='audio/ogg; codecs=flac'>
+          AMR audio in 3GPP container
+          <source src='audio.3gp' type='audio/3gpp; codecs=samr'>
+          
+          //M3U8
+          //.ts files (MPEG-2 streams)
+        */
+
+      var vaNotes = "H.264 Constrained baseline profile video (main and extended video compatible) level 3 and Low-Complexity AAC audio in MP4 container|H.264 Extended profile video (baseline-compatible) level 3 and Low-Complexity AAC audio in MP4 container|H.264 Main profile video level 3 and Low-Complexity AAC audio in MP4 container|H.264 'High' profile video (incompatible with main, baseline, or extended profiles) level 3 and Low-Complexity AAC audio in MP4 container|MPEG-4 Visual Simple Profile Level 0 video and Low-Complexity AAC audio in MP4 container|MPEG-4 Advanced Simple Profile Level 0 video and Low-Complexity AAC audio in MP4 container|WebM video and Vorbis audio in Webm container|Theora video and Vorbis audio in Ogg container|Theora video and Speex audio in Ogg container|Dirac video and Vorbis audio in Ogg container|MPEG-4 Visual Simple Profile Level 0 video and AMR audio in 3GPP container|Theora video and Vorbis audio in Matroska container".split("|");
+      var vaTypes = "video/mp4 video/mp4 video/mp4 video/mp4 video/mp4 video/mp4 video/webm video/ogg video/ogg video/ogg video/3gpp video/x-matroska".split(" ");
+      var vaCodecs = "avc1.42E01E, mp4a.40.2|avc1.58A01E, mp4a.40.2|avc1.4D401E, mp4a.40.2|avc1.64001E, mp4a.40.2|mp4v.20.8, mp4a.40.2|mp4v.20.240, mp4a.40.2|vp8, vorbis|theora, vorbis|theora, speex|dirac, vorbis|mp4v.20.8, samr|theora, vorbis".split("|");  // mkv
+      var vaExt = "mp4 mp4 mp4 mp4 mp4 mp4 webm ogv ogv ogv 3gpp mkv".split(" ");
+      for(var i = 0; i<vaTypes.length; i++) {
+        var va = document.createElement("video");
+        var t = va.canPlayType(vaTypes[i]+"; codecs=\""+vaCodecs[i]+"\"");
+        var bg = (t === "probably")?"green":(t === "maybe")?"orange":"red"; 
+        var tr = js$.createHTMLEl("h5vat", "tr");
+        js$.createHTMLEl(tr, "td", {innerHTML: "."+vaExt[i]});
+        js$.createHTMLEl(tr, "td", {innerHTML: vaTypes[i]});
+        js$.createHTMLEl(tr, "td", {innerHTML: "type='"+vaTypes[i]+"; codecs=\""+vaCodecs[i]+"\"'"});
+        js$.createHTMLEl(tr, "td", {className: bg, innerHTML: t});
+        js$.createHTMLEl(tr, "td", {innerHTML: vaNotes[i]});
+      }
+      
+      var vNotes = "H.264 Constrained baseline profile video (main and extended video compatible) level 3 in MP4 container|H.264 Extended profile video (baseline-compatible) level 3 in MP4 container|H.264 Main profile video level 3 in MP4 container|H.264 'High' profile video (incompatible with main, baseline, or extended profiles) level 3 in MP4 container|MPEG-4 Visual Simple Profile Level 0 video and Low-Complexity AAC audio in MP4 container|MPEG-4 Advanced Simple Profile Level 0 video in MP4 container|WebM video in Webm container|Theora video in Ogg container|Dirac video in Ogg container|MPEG-4 Visual Simple Profile Level 0 video in 3GPP container|Theora video in Matroska container".split("|");
+      var vTypes = "video/mp4 video/mp4 video/mp4 video/mp4 video/mp4 video/mp4 video/webm video/ogg video/ogg video/3gpp video/x-matroska".split(" ");
+      var vCodecs = "avc1.42E01E|avc1.58A01E|avc1.4D401E|avc1.64001E|mp4v.20.8|mp4v.20.240|vp8|theora|dirac|mp4v.20.8|theora".split("|"); // mkv
+      var vExt = "mp4 mp4 mp4 mp4 mp4 mp4 webm ogv ogv 3gpp mkv".split(" ");
+      for(var i = 0; i<vTypes.length; i++) {
+        var v = document.createElement("video");
+        var t = v.canPlayType(vTypes[i]+"; codecs=\""+vCodecs[i]+"\"");
+        var bg = (t === "probably")?"green":(t === "maybe")?"orange":"red";       
+        var tr = js$.createHTMLEl("h5vt", "tr");
+        js$.createHTMLEl(tr, "td", {innerHTML: "."+vExt[i]});
+        js$.createHTMLEl(tr, "td", {innerHTML: vTypes[i]});
+        js$.createHTMLEl(tr, "td", {innerHTML: "type='"+vTypes[i]+"; codecs=\""+vCodecs[i]+"\"'"});
+        js$.createHTMLEl(tr, "td", {className: bg, innerHTML: t});
+        js$.createHTMLEl(tr, "td", {innerHTML: vNotes[i]});
+      }
+      
+      var aNotes = "Low-Complexity AAC audio in MP4 container|MPEG Audio Layer 3 audio|Vorbis audio in Webm container|Vorbis audio in Ogg container|PCM audio in Waveform Audio File Format (WAVE) container|Speex audio in Ogg container|FLAC audio in Ogg container|AMR audio in 3GPP container".split("|");
+      var aTypes = "audio/mp4 audio/mpeg audio/webm audio/ogg audio/wav audio/ogg audio/ogg audio/3gpp".split(" ");
+      var aCodecs = "mp4a.40.2||vorbis|vorbis|1|speex|flac|samr".split("|");  // mkv
+      var aExt = "mp4 mp3 webm oga wav spx oga 3gp".split(" "); codecs="1"
+      for(var i = 0; i<aTypes.length; i++) {
+        var a = document.createElement("audio");
+        var t = a.canPlayType(aTypes[i]+";"+((aCodecs[i] !== "")?" codecs=\""+aCodecs[i]+"\"":""));
+        var bg = (t === "probably")?"green":(t === "maybe")?"orange":"red";
+        var tr = js$.createHTMLEl("h5at", "tr");
+        js$.createHTMLEl(tr, "td", {innerHTML: "."+aExt[i]});
+        js$.createHTMLEl(tr, "td", {innerHTML: aTypes[i]});
+        js$.createHTMLEl(tr, "td", {innerHTML: "type='"+aTypes[i]+";"+((aCodecs[i] !== "")?" codecs=\""+aCodecs[i]+"\"'":"'")});
+        js$.createHTMLEl(tr, "td", {className: bg, innerHTML: t});
+        js$.createHTMLEl(tr, "td", {innerHTML: aNotes[i]});
+      }
+    </script>
+  </body>
+</html>

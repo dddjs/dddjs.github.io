@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <video width="400" height="300" controls id="video" autoplay></video>
+    <div>
+      <button type="button" id="record">record</button>
+      <button type="button" id="pause">pause</button>
+      <button type="button" id="resume">resume</button>
+      <button type="button" id="stop">stop</button>
+      <button type="button" id="finish">finish</button>
+      <a href="#" target="_blank" id="download">download</a>
+    </div>
+    <div>
+      <button type="button" id="info">info</button>
+      <button type="button" id="isTypeSupported">isTypeSupported</button>
+    </div>
+
+    <script type="text/javascript">
+      (function () {
+        let mediaRecorder = null;
+        let mediaStream = null;
+        let chunks = [];
+
+        function getMediaStream(params) {
+          var constraints = {
+            audio: true,
+            video: true
+          };
+
+          return navigator
+            .mediaDevices
+            .getUserMedia(constraints);
+        }
+
+        function attachMedia() {
+          getMediaStream()
+            .then(stream => {
+              document.querySelector('#video').srcObject = stream;
+              mediaStream = stream;
+            })
+            .catch(err => alert(`${err.name}: ${err.message}`));
+        }
+
+        function record() {
+          mediaRecorder = new MediaRecorder(mediaStream, { mimeType:"video/webm" });
+
+          mediaRecorder.addEventListener('dataavailable', e => {
+            console.log('dataavailable %o', e);
+		        chunks.push(e.data);
+          });
+          mediaRecorder.addEventListener('error', e => console.log('error %o', e));
+          mediaRecorder.addEventListener('pause', e => console.log('pause %o', e));
+          mediaRecorder.addEventListener('resume', e => console.log('resume %o', e));
+          mediaRecorder.addEventListener('start', e => console.log('start %o', e));
+          mediaRecorder.addEventListener('stop', e => console.log('stop %o', e));
+
+          // 调用时可以通过给timeslice参数设置一个毫秒值,如果设置这个毫秒值,那么录制的媒体会按照你设置的值进行分割成一个个单独的区块, 而不是以默认的方式录制一个非常大的整块内容.
+          mediaRecorder.start(10);
+        }
+
+        function stop() {
+          mediaRecorder.stop();
+        }
+
+        function pause() {
+          mediaRecorder.pause();
+        }
+
+        function resume() {
+          mediaRecorder.resume();
+        }
+
+        function stop() {
+          mediaRecorder.stop();
+        }
+        
+        function download() {
+          var blob = new Blob(chunks, {type: "video/webm"});
+          
+          chunks = [];
+
+          var downloadLink = document.querySelector('a#download');
+          var videoURL = window.URL.createObjectURL(blob);
+          var rand =  Math.floor((Math.random() * 10000000));
+          var name  = "video_"+rand+".webm" ;
+          
+          downloadLink.href = videoURL;
+          downloadLink.setAttribute( "download", name);
+          downloadLink.setAttribute( "name", name);
+        }
+
+        function info() {
+          console.log(`mimeType ${mediaRecorder.mimeType}`);
+          console.log(`state ${mediaRecorder.state}`);
+          console.log(`stream ${mediaRecorder.stream}`);
+          console.log(`videoBitsPerSecond %o`, mediaRecorder.videoBitsPerSecond);
+          console.log(`audioBitsPerSecond ${mediaRecorder.audioBitsPerSecond}`);
+        }
+
+        function isTypeSupported() {
+          var types = [
+            "video/webm", 
+            "audio/webm", 
+            "video/webm\;codecs=vp8", 
+            "video/webm\;codecs=daala", 
+            "video/webm\;codecs=h264", 
+            "audio/webm\;codecs=opus", 
+            "video/mpeg"
+          ];
+
+          for (var i in types) { 
+            console.log(`Is ${types[i]} supported? ${MediaRecorder.isTypeSupported(types[i] ? "Maybe!" : "No")}`); 
+          }
+        }
+
+        document.querySelector('#record').addEventListener('click', e => record());
+        document.querySelector('#pause').addEventListener('click', e => pause());
+        document.querySelector('#resume').addEventListener('click', e => resume());
+        document.querySelector('#stop').addEventListener('click', e => stop());
+        document.querySelector('#finish').addEventListener('click', e => download());
+        
+        document.querySelector('#info').addEventListener('click', e => info());
+        document.querySelector('#isTypeSupported').addEventListener('click', e => isTypeSupported());
+        
+        attachMedia();
+      })()
+    </script>
+  </body>
+</html>
