@@ -26,6 +26,9 @@ function gotDevices(mediaDevices) {
 }
 
 button.addEventListener('click', event => {
+  navigator.getUserMedia = navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia;
   console.log(navigator)
   console.log(navigator.mediaDevices)
   console.log(navigator.mediaDevice)
