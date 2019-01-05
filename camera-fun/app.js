@@ -26,6 +26,11 @@ function gotDevices(mediaDevices) {
 }
 
 button.addEventListener('click', event => {
+  console.log(navigator)
+  console.log(navigator.mediaDevices)
+  console.log(navigator.mediaDevice)
+  console.log(navigator.getUserMedia)
+  console.log(navigator.getSource)
   if (typeof currentStream !== 'undefined') {
     stopMediaTracks(currentStream);
   }
