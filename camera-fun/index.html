@@ -4,13 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Camera selection</title>
   <link rel="stylesheet" href="./app.css" />
-  <script src="./vconsole.min.js"></script>
-  <script>
-    // 初始化vConsole
-    window.vConsole = new window.VConsole();
-  </script>
+
 </head>
 
 <body>
@@ -20,6 +17,9 @@
   </header>
 
   <main>
+      <input type="file" accept="image/*;capture=camera">
+      <input type="file" accept="video/*;capture=camcorder">
+      <input type="file" accept="audio/*;capture=microphone">
     <div class="controls">
       <button id="button">Get camera</button>
       <select id="select">
@@ -37,7 +37,7 @@
   </footer>
 
   <script src="./app.js"></script>
-
+  <script src="./vconsole.min.js"></script>
 </body>
 
 </html>
